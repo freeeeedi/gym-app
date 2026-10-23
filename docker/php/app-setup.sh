@@ -7,7 +7,7 @@ cd /var/www
 [ -f .env ] || cp .env.example .env
 
 echo "→ Зависимости PHP"
-composer install --no-interaction --prefer-dist --no-progress
+app-composer-install
 
 if ! grep -q '^APP_KEY=base64' .env; then
     echo "→ Ключ приложения"
