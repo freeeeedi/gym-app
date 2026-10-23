@@ -3,7 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Support\TrainingSettings;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'training_settings',
     ];
 
     /**
@@ -44,6 +47,28 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'training_settings' => 'array',
         ];
+    }
+
+    public function workouts(): HasMany
+    {
+        return $this->hasMany(Workout::class);
+    }
+
+    public function exercises(): HasMany
+    {
+        return $this->hasMany(Exercise::class);
+    }
+
+    public function dayTemplates(): HasMany
+    {
+        return $this->hasMany(DayTemplate::class);
+    }
+
+    /** Настройки тренировок: значения по умолчанию из конфига + переопределения пользователя. */
+    public function trainingSettings(): TrainingSettings
+    {
+        return new TrainingSettings($this->training_settings ?? []);
     }
 }

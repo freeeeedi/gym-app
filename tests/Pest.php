@@ -1,50 +1,63 @@
 <?php
 
+use App\Models\DayTemplate;
+use App\Models\Exercise;
+use App\Models\User;
+use App\Models\Workout;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
-
-/*
-|--------------------------------------------------------------------------
-| Test Case
-|--------------------------------------------------------------------------
-|
-| The closure you provide to your test functions is always bound to a specific PHPUnit test
-| case class. By default, that class is "PHPUnit\Framework\TestCase". Of course, you may
-| need to change it using the "pest()" function to bind a different classes or traits.
-|
-*/
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature', 'Unit');
 
 /*
-|--------------------------------------------------------------------------
-| Expectations
-|--------------------------------------------------------------------------
-|
-| When you're writing tests, you often need to check that values meet certain conditions. The
-| "expect()" function gives you access to a set of "expectations" methods that you can use
-| to assert different things. Of course, you may extend the Expectation API at any time.
-|
+| Хелперы для тестов.
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
-
-/*
-|--------------------------------------------------------------------------
-| Functions
-|--------------------------------------------------------------------------
-|
-| While Pest is very powerful out-of-the-box, you may have some testing code specific to your
-| project that you don't want to repeat in every file. Here you can also expose helpers as
-| global functions to help you to reduce the number of lines of code in your test files.
-|
-*/
-
-function something()
+function seedCatalog(): void
 {
-    // ..
+    test()->seed(DatabaseSeeder::class);
+}
+
+/**
+ * Создаёт тренировку пользователя с упражнениями (по slug).
+ * Для завершённых тренировок записывает рабочие подходы: planned_sets × ($weight × $reps).
+ */
+function makeWorkout(
+    User $user,
+    ?string $template = null,
+    array $exercises = [],
+    string $date = 'today',
+    string $status = 'planned',
+    float $weight = 50,
+    int $reps = 10,
+    int $sets = 3,
+): Workout {
+    $workout = Workout::create([
+        'user_id' => $user->id,
+        'day_template_id' => $template ? DayTemplate::where('slug', $template)->value('id') : null,
+        'title' => $template ?? 'Тренировка',
+        'scheduled_on' => Carbon::parse($date)->toDateString(),
+        'status' => $status,
+        'started_at' => $status === 'completed' ? Carbon::parse($date)->setTime(18, 0) : null,
+        'finished_at' => $status === 'completed' ? Carbon::parse($date)->setTime(19, 0) : null,
+    ]);
+
+    foreach (array_values($exercises) as $i => $slug) {
+        $we = $workout->workoutExercises()->create([
+            'exercise_id' => Exercise::where('slug', $slug)->value('id') ?? throw new RuntimeException("Нет упражнения $slug"),
+            'position' => $i,
+            'planned_sets' => $sets,
+        ]);
+        if ($status === 'completed') {
+            for ($s = 0; $s < $sets; $s++) {
+                $we->sets()->create(['position' => $s, 'weight_kg' => $weight, 'reps' => $reps]);
+            }
+        }
+    }
+
+    return $workout->fresh();
 }
