@@ -9,7 +9,7 @@ cd /var/www
 echo "→ Зависимости PHP"
 app-composer-install
 
-if ! grep -q '^APP_KEY=base64' .env; then
+if ! grep -q '^APP_KEY=base64:.\{40,\}' .env; then
     echo "→ Ключ приложения"
     php artisan key:generate --force
 fi

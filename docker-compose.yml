@@ -28,6 +28,9 @@ services:
       POSTGRES_DB: ${DB_DATABASE:-gym}
       POSTGRES_USER: ${DB_USERNAME:-gym}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+    # Порт только на localhost хоста: для GUI-клиента или SSH-туннеля, наружу не открыт.
+    ports:
+      - "127.0.0.1:${DB_FORWARD_PORT:-5433}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -35,6 +38,20 @@ services:
       interval: 3s
       timeout: 3s
       retries: 20
+
+  # Веб-интерфейс к базе: http://localhost:8081 (только с этой машины или через SSH-туннель).
+  adminer:
+    image: adminer:4
+    restart: unless-stopped
+    # Слушаем IPv4 явно: стандартный [::] падает на хостах без IPv6.
+    command: ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html"]
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN: dracula
+    ports:
+      - "127.0.0.1:${ADMINER_PORT:-8081}:8080"
+    depends_on:
+      - postgres
 
   # Собирает фронтенд в public/build и завершается.
   node:
