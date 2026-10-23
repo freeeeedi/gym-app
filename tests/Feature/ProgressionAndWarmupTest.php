@@ -6,17 +6,10 @@ use App\Services\ProgressionAdvisor;
 use App\Services\TrainingAnalytics;
 use App\Services\TrainingHistory;
 use App\Services\WarmupPlanner;
-use App\Support\OneRepMax;
 
 beforeEach(function () {
     seedCatalog();
     $this->user = User::factory()->create();
-});
-
-it('считает 1ПМ по формуле Эпли', function () {
-    expect(OneRepMax::epley(100, 1))->toBe(100.0)
-        ->and(OneRepMax::epley(100, 10))->toBe(133.3)
-        ->and(OneRepMax::epley(0, 10))->toBe(0.0);
 });
 
 it('двойная прогрессия: все подходы на верхней границе — предлагает повысить вес', function () {

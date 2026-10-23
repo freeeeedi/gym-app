@@ -1,59 +1,88 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Силовой дневник
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Веб-приложение для силовых тренировок в зале (набор мышечной массы и силы). Главная идея — не думать, какие упражнения выбрать: приложение подсказывает, чем дополнить тренировку, чтобы за ~60 минут проработать целевые мышцы, закрыть все паттерны движения дня и не повторять одни и те же упражнения слишком часто. Каждая подсказка объясняет, почему она предложена.
 
-## About Laravel
+Стек: Laravel 12, PHP 8.3, PostgreSQL 16, Livewire 3 + Alpine.js, Tailwind, Chart.js, Docker. Интерфейс на русском, тёмная тема, рассчитан на телефон (360–414 px).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Возможности
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Планирование.** Календарь (месяц и неделя): создать тренировку на дату, перенести, удалить, сменить статус (запланирована / идёт / завершена). Шаблоны дней (тяга, жим, ноги, верх, низ, всё тело) задают целевые мышцы и обязательные паттерны; можно создавать свои шаблоны или копировать стандартные.
+- **Каталог.** 67 упражнений на все группы мышц, включая тренажёры (гравитрон, верхний блок, горизонтальная тяга, жим от груди в тренажёре, жим ногами, бабочка, разведение ног и т. д.). Поиск и фильтры по мышце, паттерну и снаряду. Можно добавлять свои упражнения.
+- **Умный подбор** (`App\Services\ExerciseRecommender`, правила в `config/training.php`): покрытие паттернов и мышц дня, ротация (без упражнений из последних N тренировок на мышцу, давно не выполнявшиеся выше), бюджет времени с прогнозом длительности, базовые раньше изолирующих, лимиты объёма на тренировку и неделю. Видно, почему предложено каждое упражнение и почему не предложены остальные.
+- **Разминка** под выбранные упражнения: общая (кардио), суставная/активация под нагружаемые мышцы и разминочные подходы первого базового упражнения в процентах от рабочего веса из истории.
+- **Проведение тренировки.** Ввод подходов (вес × повторения, кнопки ±, «Повтор» прошлого подхода одним нажатием, правка и удаление), прошлый результат и подсказка прогрессии рядом, таймер отдыха (переживает перезагрузку, вибрирует по окончании) и общий таймер. Итоги: длительность, объём, подходы, новые рекорды.
+- **Аналитика.** Графики рабочего веса, расчётного 1ПМ (Эпли, с пометкой о точности) и объёма по упражнению; личные рекорды; история; недельные подходы по группам мышц с подсветкой недогруженных. Двойная прогрессия («все подходы на верхней границе → повысить вес») и признак стагнации с рекомендацией разгрузки.
+- **Настройки.** Бюджет времени, окно ротации, недельные пределы объёма, подходы и отдых, спорные правила (самый давний вариант при полной ротации, упражнения с собственным весом, учёт вспомогательной нагрузки).
+- PWA-манифест и иконка: приложение можно добавить на домашний экран.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Запуск
 
-## Learning Laravel
+Нужны Docker и Docker Compose.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+cp .env.example .env
+docker compose up -d --build
+docker compose exec app app-setup --demo
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Откройте http://localhost:8080 (порт меняется переменной `APP_PORT` в `.env`).
 
-## Laravel Sponsors
+`app-setup` — единственная команда настройки: ставит PHP-зависимости, генерирует ключ, ждёт PostgreSQL, выполняет миграции и сидеры справочников, ждёт сборку фронтенда (её делает сервис `node` при `up`). Флаг `--demo` добавляет демо-пользователя; без него создаётся только каталог.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Сервисы: `app` (php-fpm 8.3), `nginx`, `postgres` (данные в volume `pgdata`), `node` (собирает `public/build` и завершается). Redis не нужен: сессии, кеш и очереди работают через базу.
 
-### Premium Partners
+### Демо-пользователь
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+`demo@example.com` / `password`: 6 недель истории (пн/ср/пт — тяга, жим, ноги, варианты A/B), веса растут по двойной прогрессии, жим лёжа намеренно «застрял», чтобы показать стагнацию. На сегодня запланирована пустая тренировка тяги, чтобы сразу проверить подсказки. Пересоздать демо-данные: `docker compose exec app php artisan app:demo`.
 
-## Contributing
+### Без Docker
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+PHP 8.3 (pdo_pgsql, intl), Composer, Node 20+, PostgreSQL 14+:
 
-## Code of Conduct
+```bash
+cp .env.example .env   # поправьте DB_HOST=127.0.0.1 и доступ к базе
+composer install && npm ci && npm run build
+php artisan key:generate
+php artisan app:install --demo
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Тесты и форматирование
 
-## Security Vulnerabilities
+```bash
+docker compose exec app php artisan test     # или локально: php artisan test
+docker compose exec app ./vendor/bin/pint
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Тесты (Pest) по умолчанию идут на SQLite в памяти; на PostgreSQL: `DB_CONNECTION=pgsql DB_DATABASE=gym_test php artisan test`. Покрыты: сценарии подбора (день тяги без упражнений, горизонтальная → вертикальная тяга, ротация и её окно, приоритет давно не выполнявшихся, запасной вариант при полной ротации, бюджет времени, лимиты на тренировку и неделю, день без шаблона), двойная прогрессия и стагнация, разминка, итоги и рекорды, недельный объём, доступ к чужим данным, полный сценарий «план → старт → подходы → завершение → итоги» и открытие всех страниц.
 
-## License
+## Структура
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+app/
+  Services/ExerciseRecommender.php   подбор упражнений (правила 1–7)
+  Services/Recommendation/           результат: группы подсказок, причины, исключения
+  Services/WorkoutDurationEstimator  прогноз длительности
+  Services/TrainingHistory.php       срез истории одним запросом (eager loading)
+  Services/WarmupPlanner.php         разминка
+  Services/ProgressionAdvisor.php    двойная прогрессия и стагнация
+  Services/TrainingAnalytics.php     графики, рекорды, недельный объём, итоги
+  Livewire/                          WorkoutPlanner, WorkoutSession, ExerciseCatalog
+  Http/Controllers, Http/Requests    контроллеры и form requests
+  Policies/                          пользователь видит только свои данные
+  View/Components/ExerciseIcon.php   иконка с запасным вариантом
+config/training.php                  все тренерские правила и значения по умолчанию
+database/seeders/data/               каталог упражнений, шаблоны, разминка
+resources/svg/exercise-icons/        собственные SVG-иконки
+docker/                              Dockerfile php-fpm, nginx, скрипт app-setup
+docs/DECISIONS.md, docs/DATABASE.md  решения и схема БД
+```
+
+## Дальше
+
+- Иконки: сейчас 27 простых собственных пиктограмм по типам движений; можно заменить на детальные иллюстрации (механизм с запасной иконкой уже есть — достаточно положить SVG с нужным ключом).
+- Перетаскивание упражнений в плане и переноса тренировок в календаре (сейчас кнопки ↑/↓ и поле даты).
+- Учёт RIR/RPE в подходах для более точной прогрессии и автоподстройка отдыха.
+- Разные диапазоны повторений для одного упражнения (сила 3–6 / масса 8–12) в шаблоне.
+- Офлайн-режим через service worker (по ТЗ не требовался).
+- Экспорт истории в CSV.
