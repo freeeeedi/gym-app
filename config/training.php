@@ -121,6 +121,9 @@ return [
         'barbell_min_kg' => 20,
     ],
 
+    // Упражнения, где «вес» — это противовес (меньше = тяжелее).
+    'assisted_exercises' => ['assisted-pull-up'],
+
     // Шаг повышения веса при двойной прогрессии, кг.
     'weight_increments' => [
         'barbell' => 2.5,

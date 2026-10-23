@@ -219,7 +219,7 @@ class ExerciseRecommender
         $below = array_filter($targetMuscles, fn ($m) => ($sessionExercises[$m] ?? 0) > 0 && ($sessionExercises[$m] ?? 0) < $min);
         if ($untouched) {
             $score += $scoring['untouched_muscle'];
-            $reasons[] = sprintf('«%s» ещё не нагружены в этой тренировке.', $this->muscleNames($untouched));
+            $reasons[] = sprintf('Ещё не нагружено в этой тренировке: «%s».', $this->muscleNames($untouched));
         } elseif ($below) {
             $score += $scoring['muscle_below_session_min'];
             $reasons[] = sprintf('На «%s» пока меньше %d упражнений.', $this->muscleNames($below), $min);
@@ -237,7 +237,7 @@ class ExerciseRecommender
         if ($under) {
             $score += $scoring['weekly_undertrained'];
             $m = array_values($under)[0];
-            $reasons[] = sprintf('За неделю на «%s» %s подх. из рекомендуемых %d–%d.', Muscle::label($m), $this->num($weeklySets[$m] ?? 0), $weeklyMin, $settings->int('weekly_sets_max'));
+            $reasons[] = sprintf('Недобор за неделю: «%s» — %s из %d–%d подходов.', Muscle::label($m), $this->num($weeklySets[$m] ?? 0), $weeklyMin, $settings->int('weekly_sets_max'));
         }
 
         // Правило 3: давно не выполнявшиеся — выше.
