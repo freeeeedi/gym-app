@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Enums\WorkoutStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Workout extends Model
 {
@@ -25,6 +27,12 @@ class Workout extends Model
             'finished_at' => 'datetime',
             'status' => WorkoutStatus::class,
         ];
+    }
+
+    /** Храним чистую дату (Y-m-d) в любой СУБД — важно для сравнений в SQLite. */
+    protected function scheduledOn(): Attribute
+    {
+        return Attribute::set(fn ($value) => Carbon::parse($value)->toDateString());
     }
 
     public function user(): BelongsTo

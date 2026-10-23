@@ -6,7 +6,6 @@ use App\Models\Exercise;
 use App\Models\User;
 use App\Models\Workout;
 use App\Models\WorkoutSet;
-use App\Support\OneRepMax;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
