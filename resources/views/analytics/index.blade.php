@@ -57,7 +57,7 @@
                     <x-exercise-icon :icon="$r['exercise']->icon" class="h-8 w-8 text-lime-400" />
                     <div class="min-w-0 flex-1">
                         <div class="truncate text-sm font-medium">{{ $r['exercise']->name }}</div>
-                        <div class="text-xs text-zinc-400">{{ format_kg($r['max_weight']) }} кг × {{ $r['max_weight_reps'] }} · 1ПМ ≈ {{ format_kg($r['best_e1rm']) }} кг</div>
+                        <div class="text-xs text-zinc-400">@if ($r['max_weight'] > 0){{ format_kg($r['max_weight']) }} кг × {{ $r['max_weight_reps'] }} · 1ПМ ≈ {{ format_kg($r['best_e1rm']) }} кг@else собственный вес × {{ $r['max_weight_reps'] }}@endif</div>
                     </div>
                     <span class="text-zinc-500">›</span>
                 </a>

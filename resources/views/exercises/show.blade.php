@@ -94,7 +94,7 @@
                         };
                         const line = (id, key, color) => new window.Chart(document.getElementById(id), {
                             type: 'line',
-                            data: { labels, datasets: [{ data: sessions.map(s => s[key]), borderColor: color, backgroundColor: color, tension: .25, pointRadius: 3 }] },
+                            data: { labels, datasets: [{ data: sessions.map(s => s[key]), borderColor: color, backgroundColor: color, tension: 0, pointRadius: 3 }] },
                             options: opts,
                         });
                         line('chart-weight', 'top_weight', '#a3e635');
@@ -102,7 +102,7 @@
                         new window.Chart(document.getElementById('chart-volume'), {
                             type: 'bar',
                             data: { labels, datasets: [{ data: sessions.map(s => s.volume), backgroundColor: '#38bdf8' }] },
-                            options: opts,
+                            options: { ...opts, scales: { ...opts.scales, y: { ...opts.scales.y, beginAtZero: true } } },
                         });
                     });
                 </script>

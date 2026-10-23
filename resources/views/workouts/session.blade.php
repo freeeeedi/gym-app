@@ -22,7 +22,7 @@
 
     <livewire:workout-session :workout="$workout" />
 
-    <div class="mt-4 flex gap-2">
+    <div class="mb-24 mt-4 flex gap-2">
         <a href="{{ route('workouts.show', $workout) }}" class="btn-secondary flex-1">Изменить план</a>
     </div>
 

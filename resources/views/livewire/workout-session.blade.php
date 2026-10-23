@@ -77,7 +77,7 @@
                             <x-input-error :messages="$errors->get('weight')" />
                             <x-input-error :messages="$errors->get('reps')" />
                             <div class="grid grid-cols-2 gap-2">
-                                <button type="button" wire:click="copyLast" class="btn-secondary" @disabled($we->sets->isEmpty())>⧉ Как прошлый</button>
+                                <button type="button" wire:click="copyLast" class="btn-secondary" @disabled($we->sets->isEmpty())>⧉ Повтор</button>
                                 <button type="submit" class="btn-primary" wire:loading.attr="disabled">✓ Записать</button>
                             </div>
                         </form>
