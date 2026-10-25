@@ -95,8 +95,9 @@ class WorkoutPlanner extends Component
         $settings = $workout->user->trainingSettings();
         $estimator = new WorkoutDurationEstimator($settings);
 
-        $recommendation = $editable ? $recommender->recommend($workout) : null;
+        // История загружается один раз и нужна и подсказкам, и разминке.
         $history = new TrainingHistory($workout->user, $workout->scheduled_on, $workout->id);
+        $recommendation = $editable ? $recommender->recommend($workout, $history) : null;
 
         return view('livewire.workout-planner', [
             'workout' => $workout,

@@ -33,6 +33,7 @@ done
 
 php artisan optimize:clear >/dev/null
 chmod -R ugo+rwX storage bootstrap/cache
+[ -n "$VIEW_COMPILED_PATH" ] && mkdir -p "$VIEW_COMPILED_PATH" && chmod -R ugo+rwX "$VIEW_COMPILED_PATH"
 
 echo ""
 echo "Готово: откройте http://localhost:${APP_PORT:-8080}"

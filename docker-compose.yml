@@ -6,6 +6,12 @@ services:
     restart: unless-stopped
     volumes:
       - .:/var/www
+      # vendor (тысячи PHP-файлов) живёт в volume, а не в папке проекта: на Windows/macOS
+      # чтение через общую папку хоста — главный тормоз, каждый запрос трогал бы сотни файлов.
+      - vendor:/var/www/vendor
+    environment:
+      # Скомпилированные шаблоны тоже вне общей папки.
+      VIEW_COMPILED_PATH: /tmp/laravel-views
     depends_on:
       postgres:
         condition: service_healthy
@@ -65,3 +71,4 @@ services:
 volumes:
   pgdata:
   node_modules:
+  vendor:

@@ -24,14 +24,14 @@ use Illuminate\Support\Collection;
  */
 class ExerciseRecommender
 {
-    public function recommend(Workout $workout): Recommendation
+    public function recommend(Workout $workout, ?TrainingHistory $history = null): Recommendation
     {
         $workout->loadMissing(['user', 'template.muscles', 'workoutExercises.exercise.muscles']);
         $user = $workout->user;
         $settings = $user->trainingSettings();
         $scoring = config('training.scoring');
         $estimator = new WorkoutDurationEstimator($settings);
-        $history = new TrainingHistory($user, $workout->scheduled_on, $workout->id);
+        $history ??= new TrainingHistory($user, $workout->scheduled_on, $workout->id);
 
         /** @var Collection<int, WorkoutExercise> $selected */
         $selected = $workout->workoutExercises;

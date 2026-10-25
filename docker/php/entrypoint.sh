@@ -19,5 +19,9 @@ php artisan config:clear >/dev/null
 
 mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
 chmod -R ugo+rwX storage bootstrap/cache
+# Каталог скомпилированных шаблонов вне общей папки (VIEW_COMPILED_PATH в docker-compose.yml).
+if [ -n "$VIEW_COMPILED_PATH" ]; then
+    mkdir -p "$VIEW_COMPILED_PATH" && chmod -R ugo+rwX "$VIEW_COMPILED_PATH"
+fi
 
 exec "$@"
