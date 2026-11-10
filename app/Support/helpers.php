@@ -12,6 +12,14 @@ if (! function_exists('format_kg')) {
     }
 }
 
+if (! function_exists('format_int')) {
+    /** Целое с разделителем тысяч: 2437.6 → «2 438». */
+    function format_int(float $value): string
+    {
+        return number_format(round($value), 0, ',', ' ');
+    }
+}
+
 if (! function_exists('format_minutes')) {
     function format_minutes(float $minutes): string
     {

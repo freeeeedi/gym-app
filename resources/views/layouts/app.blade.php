@@ -29,7 +29,7 @@
                     {{ session('status') }}
                 </div>
             @endif
-            @if ($errors->any() && ! request()->routeIs("settings.*", "profile.*"))
+            @if ($errors->any() && ! request()->routeIs("settings.*", "profile.*", "nutrition.profile.*"))
                 <div class="mb-4 rounded-xl border border-red-900 bg-red-950/60 px-4 py-3 text-sm text-red-200">
                     @foreach ($errors->all() as $error)
                         <div>{{ $error }}</div>

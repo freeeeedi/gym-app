@@ -59,6 +59,13 @@
     .h2 {
         @apply text-lg font-semibold text-zinc-100;
     }
+    /* Горизонтальный ряд чипов: листается пальцем, полоса прокрутки не нужна. */
+    .scroll-row {
+        scrollbar-width: none;
+    }
+    .scroll-row::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 [x-cloak] {
