@@ -8,7 +8,7 @@
         ['route' => 'nutrition.profile.edit', 'match' => ['nutrition.profile.*'], 'label' => 'Профиль'],
     ];
 @endphp
-<nav class="-mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-1" aria-label="Разделы питания">
+<nav class="-mx-4 mb-4 scroll-row flex gap-2 overflow-x-auto px-4 pb-1" aria-label="Разделы питания">
     @foreach ($tabs as $tab)
         @php($active = request()->routeIs(...$tab['match']))
         <a href="{{ route($tab['route']) }}"

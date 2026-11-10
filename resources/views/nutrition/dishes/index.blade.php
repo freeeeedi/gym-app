@@ -22,7 +22,7 @@
             </p>
         </div>
 
-        <div class="-mx-4 flex gap-2 overflow-x-auto px-4" aria-label="Приём пищи">
+        <div class="-mx-4 scroll-row flex gap-2 overflow-x-auto px-4" aria-label="Приём пищи">
             <a href="{{ route('nutrition.dishes.index') }}" class="chip shrink-0 {{ $meal === null ? 'chip-active' : '' }}">Все</a>
             @foreach ($meals as $key => $label)
                 <a href="{{ route('nutrition.dishes.index', ['meal' => $key]) }}" class="chip shrink-0 whitespace-nowrap {{ $meal === $key ? 'chip-active' : '' }}">{{ $label }}</a>

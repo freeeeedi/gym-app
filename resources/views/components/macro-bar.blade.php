@@ -12,9 +12,10 @@
     $over = $warnOver && $target > 0 && $value > $target * 1.05;
 @endphp
 <div {{ $attributes }}>
-    <div class="flex items-baseline justify-between gap-2 text-sm">
+    {{-- В узкой колонке (три бара в ряд на телефоне) значение переносится под подпись. --}}
+    <div class="flex flex-wrap items-baseline justify-between gap-x-2 text-sm">
         <span class="text-zinc-300">{{ $label }}</span>
-        <span class="tabular-nums">
+        <span class="whitespace-nowrap tabular-nums">
             <span class="font-semibold {{ $over ? 'text-red-400' : 'text-zinc-50' }}">{{ format_int($value) }}</span>
             @if ($target)
                 <span class="text-zinc-500">/ {{ format_int($target) }} {{ $unit }}</span>

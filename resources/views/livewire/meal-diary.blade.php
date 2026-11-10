@@ -159,7 +159,7 @@
                         <h2 class="min-w-0 flex-1 truncate font-semibold">{{ $meals[$addingTo] }} · {{ $isToday ? 'сегодня' : $current->format('d.m') }}</h2>
                         <button type="button" wire:click="closeAdd" class="btn-primary btn-sm">Готово</button>
                     </div>
-                    <div class="-mx-4 flex gap-2 overflow-x-auto px-4" role="tablist">
+                    <div class="-mx-4 scroll-row flex gap-2 overflow-x-auto px-4" role="tablist">
                         @foreach ($tabs as $key => $label)
                             <button type="button" wire:click="setTab('{{ $key }}')" role="tab" aria-selected="{{ $tab === $key ? 'true' : 'false' }}"
                                     class="chip shrink-0 whitespace-nowrap {{ $tab === $key ? 'chip-active' : '' }}">{{ $label }}</button>
@@ -306,7 +306,7 @@
                                 <li wire:key="food-{{ $item->id }}" class="card flex items-center gap-2 !p-0">
                                     <button type="button" wire:click="selectFood({{ $item->id }})" class="min-w-0 flex-1 p-3 text-left">
                                         <span class="block font-medium leading-tight">{{ $item->name }}@if ($item->user_id) <span class="text-xs text-lime-400">свой</span>@endif</span>
-                                        <span class="mt-0.5 block text-xs text-zinc-400">{{ format_kg($item->kcal) }} ккал · Б {{ format_kg($item->protein) }} · Ж {{ format_kg($item->fat) }} · У {{ format_kg($item->carbs) }} <span class="text-zinc-600">на 100 г</span></span>
+                                        <span class="mt-0.5 block text-xs text-zinc-400">{{ format_kg($item->kcal) }} ккал · Б {{ format_kg($item->protein) }} · Ж {{ format_kg($item->fat) }} · У {{ format_kg($item->carbs) }} <span class="whitespace-nowrap text-zinc-600">на 100 г</span></span>
                                     </button>
                                     <button type="button" wire:click="toggleFavorite({{ $item->id }})" class="btn-ghost btn-sm mr-1 !px-2 text-xl {{ in_array($item->id, $favoriteIds) ? 'text-amber-300' : 'text-zinc-600' }}" aria-label="{{ in_array($item->id, $favoriteIds) ? 'Убрать из избранного' : 'В избранное' }}: {{ $item->name }}" aria-pressed="{{ in_array($item->id, $favoriteIds) ? 'true' : 'false' }}">{{ in_array($item->id, $favoriteIds) ? '★' : '☆' }}</button>
                                 </li>

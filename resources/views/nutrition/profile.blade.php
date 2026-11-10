@@ -129,7 +129,11 @@
                     @endforeach
                 </div>
                 <x-input-error :messages="$errors->get('goal')" />
-                <p class="text-xs text-zinc-500">Набор массы: +10% к расходу калорий. Сушка: −15% и больше белка, чтобы сохранить мышцы.</p>
+                <p class="text-xs text-zinc-500">
+                    @foreach (config('nutrition.goals') as $goal)
+                        {{ $goal['label'] }}: {{ sprintf('%+d', round($goal['calorie_adjustment'] * 100)) }}% к расходу калорий, белок {{ format_kg($goal['protein_per_kg']) }} г на кг веса.
+                    @endforeach
+                </p>
             </section>
 
             <section class="card space-y-3">

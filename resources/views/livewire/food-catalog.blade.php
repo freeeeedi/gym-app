@@ -43,7 +43,7 @@
                         <li wire:key="rec-{{ $role }}-{{ $food->id }}" class="card flex items-center gap-2 !p-3">
                             <div class="min-w-0 flex-1">
                                 <div class="font-medium leading-tight">{{ $food->name }}</div>
-                                <div class="mt-0.5 text-xs text-zinc-400">{{ format_kg($food->kcal) }} ккал · Б {{ format_kg($food->protein) }} · Ж {{ format_kg($food->fat) }} · У {{ format_kg($food->carbs) }} <span class="text-zinc-600">на 100 г</span></div>
+                                <div class="mt-0.5 text-xs text-zinc-400">{{ format_kg($food->kcal) }} ккал · Б {{ format_kg($food->protein) }} · Ж {{ format_kg($food->fat) }} · У {{ format_kg($food->carbs) }} <span class="whitespace-nowrap text-zinc-600">на 100 г</span></div>
                                 @if ($suggestion->reasons)
                                     <div class="mt-1 text-xs text-lime-300/90">{{ implode(' · ', $suggestion->reasons) }}</div>
                                 @endif
@@ -133,7 +133,7 @@
                 <li wire:key="food-{{ $food->id }}" class="card flex items-center gap-2 !p-3">
                     <div class="min-w-0 flex-1">
                         <div class="font-medium leading-tight">{{ $food->name }}@if ($food->user_id && $tab === 'all') <span class="text-xs text-lime-400">свой</span>@endif</div>
-                        <div class="mt-0.5 text-xs text-zinc-400">{{ format_kg($food->kcal) }} ккал · Б {{ format_kg($food->protein) }} · Ж {{ format_kg($food->fat) }} · У {{ format_kg($food->carbs) }} <span class="text-zinc-600">на 100 г</span></div>
+                        <div class="mt-0.5 text-xs text-zinc-400">{{ format_kg($food->kcal) }} ккал · Б {{ format_kg($food->protein) }} · Ж {{ format_kg($food->fat) }} · У {{ format_kg($food->carbs) }} <span class="whitespace-nowrap text-zinc-600">на 100 г</span></div>
                         <div class="mt-0.5 text-xs text-zinc-500">
                             {{ $food->categoryLabel() }}@if ($food->serving_g) · {{ $food->serving_name }} = {{ format_kg($food->serving_g) }} г@endif
                         </div>
