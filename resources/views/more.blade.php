@@ -8,6 +8,8 @@
         <a href="{{ route('templates.index') }}" class="card flex items-center justify-between">Шаблоны тренировочных дней <span class="text-zinc-500">›</span></a>
         <a href="{{ route('settings.edit') }}" class="card flex items-center justify-between">Настройки тренировок <span class="text-zinc-500">›</span></a>
         <a href="{{ route('exercises.create') }}" class="card flex items-center justify-between">Добавить своё упражнение <span class="text-zinc-500">›</span></a>
+        <a href="{{ route('nutrition.profile.edit') }}" class="card flex items-center justify-between">Профиль питания: вес, рост, цель <span class="text-zinc-500">›</span></a>
+        <a href="{{ route('nutrition.shopping.index') }}" class="card flex items-center justify-between">Список покупок <span class="text-zinc-500">›</span></a>
         <a href="{{ route('profile.edit') }}" class="card flex items-center justify-between">Профиль и пароль <span class="text-zinc-500">›</span></a>
         <form method="POST" action="{{ route('logout') }}">
             @csrf

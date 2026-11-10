@@ -85,6 +85,25 @@
             <a href="{{ route('analytics') }}" class="block text-sm text-lime-400">Подробнее о прогрессе ›</a>
         </section>
 
+        <a href="{{ route('nutrition.diary') }}" class="card block space-y-3" aria-label="Питание сегодня">
+            <div class="flex items-baseline justify-between">
+                <h2 class="h2">Питание сегодня</h2>
+                <span class="text-sm text-lime-400">Дневник ›</span>
+            </div>
+            @if ($nutritionTargets)
+                <x-macro-bar label="Калории" :value="$eaten->kcal" :target="$nutritionTargets->kcal" unit="ккал" :warn-over="true" />
+                <div class="grid grid-cols-3 gap-3">
+                    <x-macro-bar label="Белки" :value="$eaten->protein" :target="$nutritionTargets->protein" color="bg-sky-400" />
+                    <x-macro-bar label="Жиры" :value="$eaten->fat" :target="$nutritionTargets->fat" color="bg-amber-400" />
+                    <x-macro-bar label="Углеводы" :value="$eaten->carbs" :target="$nutritionTargets->carbs" color="bg-violet-400" />
+                </div>
+            @elseif (! $eaten->isZero())
+                <p class="text-sm text-zinc-300">Съедено {{ format_int($eaten->kcal) }} ккал. Заполните профиль питания, чтобы видеть норму.</p>
+            @else
+                <p class="muted">Записывайте еду и сравнивайте КБЖУ с нормой под вашу цель.</p>
+            @endif
+        </a>
+
         @if ($lastCompleted)
             <a href="{{ route('workouts.summary', $lastCompleted) }}" class="block text-center text-sm text-zinc-400">
                 Последняя тренировка: {{ $lastCompleted->title }}, {{ $lastCompleted->scheduled_on->translatedFormat('j F') }} ›

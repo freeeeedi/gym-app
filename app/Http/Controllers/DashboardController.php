@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\DayTemplate;
+use App\Services\Nutrition\NutritionCalculator;
+use App\Services\Nutrition\NutritionDiary;
 use App\Services\TrainingAnalytics;
 use App\Services\TrainingHistory;
 use Illuminate\Http\Request;
@@ -11,7 +13,7 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __invoke(Request $request, TrainingAnalytics $analytics): View
+    public function __invoke(Request $request, TrainingAnalytics $analytics, NutritionDiary $diary, NutritionCalculator $calculator): View
     {
         $user = $request->user();
         $today = Carbon::today();
@@ -38,6 +40,8 @@ class DashboardController extends Controller
             'templates' => DayTemplate::visibleTo($user)->orderByRaw('user_id is null')->orderBy('id')->get(),
             'volume' => $volume,
             'settings' => $user->trainingSettings(),
+            'eaten' => $diary->dayTotals($user, $today),
+            'nutritionTargets' => $calculator->targets($user->nutritionProfile()),
         ]);
     }
 }
