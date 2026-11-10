@@ -1,13 +1,8 @@
 name: Tests
 
+# Автозапуск отключён (письма о каждом прогоне). Запуск вручную: Actions → Tests → Run workflow.
 on:
-  push:
-    branches:
-      - master
-      - '*.x'
-  pull_request:
-  schedule:
-    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
